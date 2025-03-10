@@ -2,6 +2,13 @@ const config = {
     type: Phaser.AUTO, // Chọn WebGL hoặc Canvas tùy theo trình duyệt
     width: 400,        // Chiều rộng màn hình game (dọc)
     height: 700,       // Chiều cao màn hình game
+    physics: {
+        default: "arcade", // Sử dụng hệ vật lý Arcade
+        arcade: {
+            gravity: { y: 1000 }, // Trọng lực kéo nhân vật xuống
+            debug: false // Ẩn viền va chạm
+        }
+    },
     scene: {
         preload: preload, // Tải tài nguyên trước khi game bắt đầu
         create: create    // Tạo game sau khi tài nguyên đã tải xong
@@ -27,11 +34,14 @@ function create() {
     // Hiển thị hình nền trời, căn giữa màn hình
     this.add.image(200, 350, 'sky');
 
-    // Hiển thị nhân vật ở giữa màn hình
-    player = this.add.sprite(200, 350, 'dude');
+    // Thêm nhân vật vào game & bật physics
+    player = this.physics.add.sprite(200, 350, 'dude');
 
     // Chọn frame đứng yên (frame số 4 trong spritesheet)
     player.setFrame(4);
+
+    // Giới hạn nhân vật không đi ra khỏi màn hình
+    player.setCollideWorldBounds(true);
 }
 
 
