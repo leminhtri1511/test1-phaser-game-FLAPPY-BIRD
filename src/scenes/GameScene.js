@@ -15,7 +15,7 @@ class GameScene extends Phaser.Scene {
     }
 
     create() {
-        console.log("Game start!");
+        console.log("⚡ Game start!");
     
         this.add.image(200, 350, "sky");
     
@@ -25,7 +25,7 @@ class GameScene extends Phaser.Scene {
             fontSize: "24px",
             fill: "#ffffff",
         });
-    
+
         // **Tạo nhóm ống nước**
         this.pipes = this.physics.add.group({
             allowGravity: false,
@@ -61,23 +61,26 @@ class GameScene extends Phaser.Scene {
         });
     }
     
-
-
     jump = () => {
         this.player.setVelocityY(-400); // Nhảy lên
     };
 
     spawnPipes = () => {
-        const pipeGap = 130; // Khoảng cách giữa ống trên và dưới
+        const pipeGap = 200; // Khoảng cách giữa ống trên và dưới
         const minY = 90; // Vị trí cao nhất của ống trên
-        const maxY = 530; // Vị trí thấp nhất của ống trên
+        const maxY = 550; // Vị trí thấp nhất của ống trên
     
-        // Số lượng cặp ống nước xuất hiện cùng lúc
-        const pipeCount = Phaser.Math.Between(2, 3); // Số lượng cặp ống
+        // **Tính số lượng cặp ống dựa trên điểm số**
+        const difficultyLevel = Math.floor(this.score / 10); // Mỗi 10 điểm, tăng độ khó
+        const minPipes = Math.min(1 + difficultyLevel, 7); // Giới hạn tối thiểu
+        const maxPipes = Math.min(2 + difficultyLevel, 8); // Giới hạn tối đa
+    
+        // **Số lượng cặp ống nước xuất hiện**
+        const pipeCount = Phaser.Math.Between(minPipes, maxPipes);
     
         for (let i = 0; i < pipeCount; i++) {
             const pipeY = Phaser.Math.Between(minY, maxY);
-            const offsetX = i * 150; 
+            const offsetX = i * 150;
     
             // **Ống nước trên**
             const topPipe = this.pipes.create(400 + offsetX, pipeY - pipeGap, "pipe");
@@ -91,13 +94,13 @@ class GameScene extends Phaser.Scene {
     
             // **Tạo vùng tính điểm giữa 2 ống**
             const scoreZone = this.scoreZones.create(400 + offsetX, pipeY, null, null, true);
-            scoreZone.setSize(10, pipeGap); // Kích thước cảm biến nhỏ
-            scoreZone.setVelocityX(-200); // Di chuyển cùng tốc độ với ống nước
-            scoreZone.setVisible(false); // Ẩn vùng cảm biến
+            scoreZone.setSize(30, pipeGap);
+            scoreZone.setVelocityX(-200);
+            scoreZone.setVisible(false);
         }
-    };
     
-
+        console.log(`🎯 Difficulty: ${difficultyLevel} | Pipe Count: ${pipeCount}`);
+    };
 
     gameOver = () => {
         this.physics.pause(); // Dừng toàn bộ vật lý
@@ -112,7 +115,7 @@ class GameScene extends Phaser.Scene {
     
         this.pipeEvent.remove(); // Dừng tạo ống nước
     
-        console.log("Game Over!");
+        console.log("❌ Game Over!");
     
         // **Tạo nút Restart**
         const restartButton = this.add.image(200, 400, "restart")
@@ -120,6 +123,8 @@ class GameScene extends Phaser.Scene {
         .on("pointerdown", () => {
             this.scene.restart(); // Restart game khi bấm vào nút
         });
+
+        console.log("🏆 Total score:", this.score);
     
         // Hiệu ứng hover khi rê chuột vào nút Restart
         // restartButton.on("pointerover", () => {
@@ -129,15 +134,13 @@ class GameScene extends Phaser.Scene {
         //     restartButton.setStyle({ fill: "#ffffff" });
         // });
     };
+
     updateScore = (player, scoreZone) => {
         this.score += 1; // Tăng điểm số
         this.scoreText.setText(`Score: ${this.score}`); // Cập nhật text
-    
         scoreZone.destroy(); // Xóa cảm biến để không tính điểm lại
-        console.log("Current score:", this.score);
     };
     
-
     update() {
         // Giới hạn không cho nhân vật bay quá cao
         if (this.player.y < 0) {
