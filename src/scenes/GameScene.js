@@ -10,7 +10,7 @@ class GameScene extends Phaser.Scene {
             "https://labs.phaser.io/assets/sprites/dude.png",
             { frameWidth: 32, frameHeight: 48 }
         );
-        this.load.image("pipe", "./assets/images/flying_object.png"); // Load hình ống nước
+        // this.load.image("pipe", "./assets/images/flying_object.png"); // Load hình ống nước
         this.load.image("restart", "./assets/images/restart.png"); // Nút restart
     }
 
@@ -80,9 +80,9 @@ class GameScene extends Phaser.Scene {
         const maxY = 550; // Vị trí thấp nhất của ống trên
     
         // **Tính số lượng cặp ống dựa trên điểm số**
-        const difficultyLevel = Math.floor(this.score / 10); // Mỗi 10 điểm, tăng độ khó
-        const minPipes = Math.min(1 + difficultyLevel, 7); // Giới hạn tối thiểu
-        const maxPipes = Math.min(2 + difficultyLevel, 8); // Giới hạn tối đa
+        const difficultyLevel = Math.floor(this.score / 5); // Mỗi X điểm, tăng độ khó
+        const minPipes = Math.min(2 + difficultyLevel, 7); // Giới hạn tối thiểu
+        const maxPipes = Math.min(3 + difficultyLevel, 8); // Giới hạn tối đa
     
         // **Số lượng cặp ống nước xuất hiện**
         const pipeCount = Phaser.Math.Between(minPipes, maxPipes);
