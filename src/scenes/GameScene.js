@@ -16,26 +16,42 @@ class GameScene extends Phaser.Scene {
 
     create() {
         console.log("Game start!");
-
+    
         this.add.image(200, 350, "sky");
-
+    
+        // **Khởi tạo điểm số**
+        this.score = 0;
+        this.scoreText = this.add.text(20, 20, "Score: 0", {
+            fontSize: "24px",
+            fill: "#ffffff",
+        });
+    
         // **Tạo nhóm ống nước**
         this.pipes = this.physics.add.group({
             allowGravity: false,
             immovable: true
         });
-
+    
+        // **Tạo nhóm "cảm biến" để tính điểm**
+        this.scoreZones = this.physics.add.group({
+            allowGravity: false,
+            immovable: true
+        });
+    
         // **Tạo nhân vật**
         this.player = this.physics.add.sprite(100, 350, "dude");
         this.player.setFrame(4);
         this.player.setCollideWorldBounds(true);
-
+    
         // **Thêm va chạm giữa nhân vật và ống nước**
         this.physics.add.collider(this.player, this.pipes, this.gameOver, null, this);
-
+    
+        // **Thêm va chạm giữa nhân vật và vùng tính điểm**
+        this.physics.add.overlap(this.player, this.scoreZones, this.updateScore, null, this);
+    
         // **Sự kiện chạm màn hình để nhảy**
         this.input.on("pointerdown", this.jump, this);
-
+    
         // **Tạo ống nước mỗi 2 giây**
         this.pipeEvent = this.time.addEvent({
             delay: 2000,
@@ -44,6 +60,7 @@ class GameScene extends Phaser.Scene {
             loop: true
         });
     }
+    
 
 
     jump = () => {
@@ -51,37 +68,35 @@ class GameScene extends Phaser.Scene {
     };
 
     spawnPipes = () => {
-        const pipeGap = 150; // Khoảng cách giữa ống trên và dưới
+        const pipeGap = 130; // Khoảng cách giữa ống trên và dưới
         const minY = 90; // Vị trí cao nhất của ống trên
         const maxY = 530; // Vị trí thấp nhất của ống trên
-
+    
         // Số lượng cặp ống nước xuất hiện cùng lúc
-        const pipeCount = Phaser.Math.Between(2, 4); // Số lượng cặp ống (x đến y cặp)
-
+        const pipeCount = Phaser.Math.Between(2, 3); // Số lượng cặp ống
+    
         for (let i = 0; i < pipeCount; i++) {
-            const pipeY = Phaser.Math.Between(minY, maxY); // Chọn vị trí ngẫu nhiên
-            const offsetX = i * 150; // Mỗi cặp ống sẽ cách nhau ###px
-
-            // **Ống nước trên (luôn ở trên)**
+            const pipeY = Phaser.Math.Between(minY, maxY);
+            const offsetX = i * 150; 
+    
+            // **Ống nước trên**
             const topPipe = this.pipes.create(400 + offsetX, pipeY - pipeGap, "pipe");
-            topPipe.setVelocityX(-200); // Di chuyển sang trái
-            // topPipe.flipY = true; // Lật ngược ống trên
-            topPipe.body.allowGravity = false; // Không bị ảnh hưởng bởi gravity
-
-            // **Ống nước dưới (luôn ở dưới)**
+            topPipe.setVelocityX(-200);
+            topPipe.body.allowGravity = false;
+    
+            // **Ống nước dưới**
             const bottomPipe = this.pipes.create(400 + offsetX, pipeY + pipeGap, "pipe");
-            bottomPipe.setVelocityX(-200); // Di chuyển sang trái
-            bottomPipe.body.allowGravity = false; // Không bị ảnh hưởng bởi gravity
+            bottomPipe.setVelocityX(-200);
+            bottomPipe.body.allowGravity = false;
+    
+            // **Tạo vùng tính điểm giữa 2 ống**
+            const scoreZone = this.scoreZones.create(400 + offsetX, pipeY, null, null, true);
+            scoreZone.setSize(10, pipeGap); // Kích thước cảm biến nhỏ
+            scoreZone.setVelocityX(-200); // Di chuyển cùng tốc độ với ống nước
+            scoreZone.setVisible(false); // Ẩn vùng cảm biến
         }
-        // Xóa ống nước khi ra khỏi màn hình
-        this.pipes.children.iterate(pipe => {
-            if (pipe && pipe.x < -50) {
-                pipe.destroy();
-            }
-        });
-
-        console.log("pipeCount:" + pipeCount)
     };
+    
 
 
     gameOver = () => {
@@ -113,6 +128,13 @@ class GameScene extends Phaser.Scene {
         // restartButton.on("pointerout", () => {
         //     restartButton.setStyle({ fill: "#ffffff" });
         // });
+    };
+    updateScore = (player, scoreZone) => {
+        this.score += 1; // Tăng điểm số
+        this.scoreText.setText(`Score: ${this.score}`); // Cập nhật text
+    
+        scoreZone.destroy(); // Xóa cảm biến để không tính điểm lại
+        console.log("Current score:", this.score);
     };
     
 
