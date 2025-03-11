@@ -86,6 +86,4 @@ Dự án này được phát hành dưới giấy phép **MIT**. Bạn có thể
 📧 **Email:** *trile20021511@gmail.com*  
 🌐 **GitHub:** [leminhtri1511](https://github.com/leminhtri1511)  
 
-🚀 **Chúc bạn chơi vui!** 🎮🔥
-
----
+🚀 **Chúc bạn chơi vui vẻ!** 🎮🔥
