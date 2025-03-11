@@ -5,11 +5,9 @@
 
 ## **📌 Tính năng**
 ✅ Nhân vật bay lên khi chạm vào màn hình  
-✅ Ống nước di chuyển từ phải sang trái  
 ✅ Cơ chế tính điểm khi bay qua ống nước  
 ✅ Mức độ khó tăng dần theo điểm số  
 ✅ Lưu điểm số cao nhất (highest score) vào **localStorage**  
-✅ Hiển thị nút **Play** trước khi bắt đầu game  
 ✅ Hiệu ứng **Game Over** & **Restart**  
 
 ---
@@ -39,8 +37,6 @@ Sau đó mở **http://localhost:8000** trên trình duyệt.
 ---
 
 ## **🎮 Cách chơi**
-1️⃣ **Nhấn "Play"** để bắt đầu game  
-2️⃣ **Chạm vào màn hình** để giúp nhân vật bay lên  
 3️⃣ **Bay qua các ống nước** để ghi điểm  
 4️⃣ Nếu **chạm vào ống nước**, game sẽ kết thúc  
 5️⃣ Nhấn **"Restart"** để chơi lại  
@@ -93,5 +89,3 @@ Dự án này được phát hành dưới giấy phép **MIT**. Bạn có thể
 🚀 **Chúc bạn chơi vui!** 🎮🔥
 
 ---
-
-Bạn có muốn thêm hình ảnh minh họa hoặc demo vào README không? 📸🎨
