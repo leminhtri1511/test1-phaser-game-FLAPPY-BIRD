@@ -19,13 +19,22 @@ class GameScene extends Phaser.Scene {
     
         this.add.image(200, 350, "sky");
     
+        // **Lấy Highest Score từ Local Storage**
+        this.highestScore = localStorage.getItem("highestScore") || 0;
+    
         // **Khởi tạo điểm số**
         this.score = 0;
-        this.scoreText = this.add.text(20, 20, "Score: 0", {
+        this.scoreText = this.add.text(20, 20, `Score: 0`, {
             fontSize: "24px",
             fill: "#ffffff",
         });
-
+    
+        // **Hiển thị Highest Score**
+        this.highestScoreText = this.add.text(220, 20, `Highest: ${this.highestScore}`, {
+            fontSize: "24px",
+            fill: "#ffff00",
+        });
+    
         // **Tạo nhóm ống nước**
         this.pipes = this.physics.add.group({
             allowGravity: false,
@@ -137,9 +146,18 @@ class GameScene extends Phaser.Scene {
 
     updateScore = (player, scoreZone) => {
         this.score += 1; // Tăng điểm số
-        this.scoreText.setText(`Score: ${this.score}`); // Cập nhật text
+        this.scoreText.setText(`Score: ${this.score}`); // Cập nhật điểm số trên màn hình
+    
+        // **Cập nhật Highest Score nếu đạt điểm cao mới**
+        if (this.score > this.highestScore) {
+            this.highestScore = this.score;
+            this.highestScoreText.setText(`Highest: ${this.highestScore}`);
+            localStorage.setItem("highestScore", this.highestScore); // Lưu vào Local Storage
+        }
+    
         scoreZone.destroy(); // Xóa cảm biến để không tính điểm lại
     };
+    
     
     update() {
         // Giới hạn không cho nhân vật bay quá cao
