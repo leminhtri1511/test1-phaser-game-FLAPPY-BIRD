@@ -37,9 +37,9 @@ Sau đó mở **http://localhost:8000** trên trình duyệt.
 ---
 
 ## **🎮 Cách chơi**
-3️⃣ **Bay qua các ống nước** để ghi điểm  
-4️⃣ Nếu **chạm vào ống nước**, game sẽ kết thúc  
-5️⃣ Nhấn **"Restart"** để chơi lại  
+1️⃣ **Bay qua các ống nước** để ghi điểm  
+2️⃣ Nếu **chạm vào ống nước**, game sẽ kết thúc  
+3️⃣ Nhấn **"Restart"** để chơi lại  
 
 ---
 
